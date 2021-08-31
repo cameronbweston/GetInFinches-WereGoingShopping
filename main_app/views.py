@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Finch
 
-def cats_index(request):
+def finches_index(request):
   finches = Finch.objects.all()
   return render(request, 'finches/index.html', { 'finches': finches })
 # Create your views here.
