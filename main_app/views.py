@@ -16,6 +16,15 @@ def finches_detail(request, finch_id):
   finch = Finch.objects.get(id=finch_id)
   return render(request, 'finches/detail.html', {'finch' : finch})
 
-def FinchCreate(CreateView):
+class FinchCreate(CreateView):
   model = Finch
   fields = '__all__'
+  success_url = '/finches/'
+
+class FinchUpdate(UpdateView):
+  model = Finch
+  fields = '__all__'
+
+class FinchDelete(DeleteView):
+  model = Finch
+  success_url = '/finches/'
