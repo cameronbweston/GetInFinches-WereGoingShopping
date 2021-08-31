@@ -19,7 +19,7 @@
   {% for finch in finches %}
     <div class="card">
       {% comment %} Add this line {% endcomment %}
-      <a href="/finches/{{ finch.id }}">
+      <a href="{% url 'finches_detail' finch.id%}">
         <div class="card-content">
           <div class="card-img-container">
             <img 
