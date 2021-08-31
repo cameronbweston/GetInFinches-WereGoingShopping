@@ -9,3 +9,6 @@ def home(request):
   return render(request, 'home.html')
 def about(request):
   return render(request, 'about.html')
+def finches_detail(request, finch_id):
+  finch = Finch.objects.get(id=finch_id)
+  return render(request, 'finches/detail.html', {'finch' : finch})

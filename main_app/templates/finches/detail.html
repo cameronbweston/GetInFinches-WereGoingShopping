@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type='text/css' href="{% static 'css/cat-detail.css'%}"
+/>
+{% endblock head %}
+
+{% block content %}
+
+<section class="cat-container">
+  <div class="cat-img">
+    <img 
+      src="{% static 'images/finch.jpg' %}" 
+      alt="Cool birb"
+    >
+  </div>
+  <div class="cat-details">
+    <h1>{{ finch.name }}</h1>
+    <h2>A {{ finch.color }} birb</h2>
+    <p>{{ finch.description }}</p>
+  </div>
+</section>
+
+{% endblock content %}
+
