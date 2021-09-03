@@ -28,11 +28,18 @@
       <h2>Feedings</h2>
     </div>
       <h3>Add a Feeding</h3>
-      <form action={% url 'add_feeding' finch.id %} method="post" class="subsection-content">
-        {% csrf_token %}
-        {{ feeding_form.as_p }}
-        <button type="submit" class="btn submit">Add Feeding</button>
-      </form> 
+        <form action="{% url 'add_feeding' finch.id %}" method="post" class="subsection-content">
+          {% comment %} New markup below {% endcomment %}
+          {% if finch.fed_for_today %}
+            <p class="fed">{{finch.name}} has been fed all their meals for today!</p>
+          {% else %}
+            <p class="unfed">{{finch.name}} might be hungry!</p>
+          {% endif %}
+          {% comment %} New markup above {% endcomment %}
+          {% csrf_token %}
+          {{ feeding_form.as_p }}
+          <button type="submit" class="btn submit">Add Feeding</button>
+        </form>
       <h3>Past Feedings</h3>
           {% if finch.feeding_set.all.count %}
             <table>
@@ -49,8 +56,56 @@
               </tbody>
             </table>
           {% else %}
-            <p class="subsection-content">{{cat.name}} has never been fed 😟</p>
+            <p class="subsection-content">{{finch.name}} has never been fed 😟</p>
           {% endif %}
+  </section>
+    <section class="toys">
+    <div class="subsection-title">
+      <h2>Toys</h2>
+    </div>
+    <h3>{{ finch.name }}'s Toys</h3>
+    <div class="subsection-content">
+      {% if finch.toys.count %}
+        {% for toy in finch.toys.all %}
+          <div class="toy-container">
+            <div 
+              class="color-block"
+              style="background-color: {{ toy.color }}"
+            ></div>
+            <a href="{% url 'toys_detail' toy.id %}">
+              <p>A {{ toy.color }} {{ toy.name }}</p>
+            </a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="no-toys">{{finch.name}} doesn't have any toys 😞</p>
+      {% endif %}
+    </div>
+    <h3>Available Toys</h3>
+    <div class="subsection-content">
+         {% comment %} We'll display available toys here {% endcomment %}
+      {% if toys.count %}
+        {% for toy in toys.all %}
+          <div class="toy-container">
+            <div 
+              class="color-block"
+              style="background-color: {{ toy.color }}"
+            ></div>
+            <a href="{% url 'toys_detail' toy.id %}">
+              <p>A {{ toy.color }} {{ toy.name }}</p>
+            </a>
+            <form action="{% url 'assoc_toy' finch.id toy.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn submit">Give toy</button>
+            </form>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="all-toys">
+          {{finch.name}} already has all the available toys 🥳
+        </p>
+      {% endif %}
+    </div>
   </section>
 </div>
 

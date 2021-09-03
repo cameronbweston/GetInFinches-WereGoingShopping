@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
-
+from datetime import date
+from django.contrib.auth.models import User
 MEALS = (
   ('B', 'Breakfast'),
   ('L', 'Lunch'),
@@ -8,17 +9,32 @@ MEALS = (
 )
 
 # Create your models here.
+class Toy(models.Model):
+  name = models.CharField(max_length=50)
+  color = models.CharField(max_length=20)
+
+  def __str__(self):
+    return self.name
+  
+  def get_absolute_url(self):
+      return reverse("toys_detail", kwargs={"pk": self.pk})
+  
 class Finch(models.Model):
   name = models.CharField(max_length=100)
   color = models.CharField(max_length=100)
   description = models.TextField(max_length=250)
   canFly = models.BooleanField(default=True)
-
+  toys = models.ManyToManyField(Toy)
+  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  
   def __str__(self):
     return self.name
 
   def get_absolute_url(self):
     return reverse('finches_detail', kwargs={'finch_id' : self.id})
+
+  def fed_for_today(self):
+    return self.feeding_set.filter(date=date.today()).count() >= len(MEALS)
 
 class Feeding(models.Model):
   date = models.DateField('Feeding date')
@@ -31,3 +47,4 @@ class Feeding(models.Model):
 
   class Meta:
     ordering = ['-date']
+
